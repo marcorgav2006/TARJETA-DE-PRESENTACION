@@ -1198,7 +1198,7 @@
         <button 
           class="accordion-trigger" 
           onclick="toggleAccordion('qrContent', 'qrChevron')"
-          aria-expanded="false"
+          aria-expanded="true"
         >
           <div class="accordion-header-left">
             <div class="accordion-icon-badge badge-qr">
@@ -1214,12 +1214,12 @@
               <p>Escaneo instantáneo sin contacto</p>
             </div>
           </div>
-          <svg class="chevron-icon" id="qrChevron" viewBox="0 0 24 24">
+          <svg class="chevron-icon rotate" id="qrChevron" viewBox="0 0 24 24">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </button>
 
-        <div class="accordion-content" id="qrContent">
+        <div class="accordion-content open" id="qrContent">
           <div class="qr-preview-box">
             <div class="qr-image-container">
               <img 
@@ -1387,8 +1387,7 @@
         'END:VCARD'
       ];
 
-      const vcardText = vCardLines.join('
-');
+      const vcardText = vCardLines.join('\r\n');
       const blob = new Blob([vcardText], { type: 'text/vcard;charset=utf-8;' });
       const downloadUrl = URL.createObjectURL(blob);
 
