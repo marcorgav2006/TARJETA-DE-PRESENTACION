@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#074574" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Ing. Bella Gavilanes | Gerente de Cadena de Abastecimiento - Grupo Alessa</title>
+
+  <!-- Google Font: Inter (Tipografía ejecutiva de alta legibilidad) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       VARIABLES Y PALETA CORPORATIVA OFICIAL - GRUPO ALESSA S.A.
+       ========================================================================== */
+    :root {
+      /* Azules corporativos extraídos de la identidad oficial Alessa */
+      --alessa-navy: #074574;
+      --alessa-navy-dark: #042D4F;
+      --alessa-blue: #0A5386;
+      --alessa-blue-light: #0D639E;
+      --alessa-cyan: #0085CA;
+      --alessa-cyan-glow: #00A3FF;
+      --alessa-cyan-soft: #E6F3FA;
+      --alessa-white: #FFFFFF;
+      --alessa-text-primary: #0F2942;
+      --alessa-text-secondary: #516F8B;
+      --alessa-text-subtle: #829BB2;
+      --alessa-bg-page: #EDF3F8;
+      --alessa-card-bg: #FFFFFF;
+      --alessa-border: #DCE8F2;
+      --alessa-border-light: #EDF4FA;
+      
+      --radius-card: 28px;
+      --radius-element: 16px;
+      --shadow-card: 0 25px 60px -15px rgba(7, 69, 116, 0.22), 0 10px 25px -5px rgba(15, 41, 66, 0.08);
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--alessa-bg-page);
+      color: var(--alessa-text-primary);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+      overflow-x: hidden;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    @media (min-width: 640px) {
+      body {
+        padding: 36px 16px;
+        background: radial-gradient(circle at 50% 15%, #E2ECF5 0%, #D0DFEE 100%);
+      }
+    }
+
+    /* ==========================================================================
+       ANIMACIÓN DE ENTRADA (Card Delivery)
+       ========================================================================== */
+    @keyframes cardDelivery {
+      0% {
+        opacity: 0;
+        transform: translateY(45px) scale(0.95) perspective(1200px) rotateX(6deg);
+        filter: blur(8px);
+      }
+      60% {
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) perspective(1200px) rotateX(0deg);
+        filter: blur(0px);
+      }
+    }
+
+    /* ==========================================================================
+       CONTENEDOR PRINCIPAL MOBILE-FIRST
+       ========================================================================== */
+    .business-card {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--alessa-card-bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      animation: cardDelivery 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+      will-change: transform, opacity, filter;
+    }
+
+    @media (min-width: 640px) {
+      .business-card {
+        min-height: auto;
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        margin: auto;
+      }
+    }
+
+    /* ==========================================================================
+       EFECTO NAMEDROP ESTÁTICO DE CONTORNOS (Sin rotaciones ni vueltas)
+       Ilumina estrictamente el perímetro exterior del teléfono / tarjeta
+       ========================================================================== */
+    .contour-glow-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 60;
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .contour-glow-overlay.active {
+      opacity: 1;
+    }
+
+    /* Borde iluminado perimetral estático con resplandor cyan/azul */
+    .contour-light-frame {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 3.5px solid var(--alessa-cyan-glow);
+      box-shadow: 
+        0 0 25px rgba(0, 163, 255, 0.9),
+        0 0 50px rgba(0, 133, 202, 0.7),
+        inset 0 0 25px rgba(0, 163, 255, 0.6),
+        inset 0 0 45px rgba(10, 83, 134, 0.5);
+      animation: contourLightPulse 1.6s ease-in-out infinite alternate;
+    }
+
+    /* Destello de luz blanca/cyan superior que recorre los bordes superiores */
+    .contour-top-beam {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, transparent 5%, #00D2FF 30%, #FFFFFF 50%, #00D2FF 70%, transparent 95%);
+      box-shadow: 0 0 20px #00D2FF, 0 0 35px #0085CA;
+      filter: blur(1px);
+    }
+
+    /* Destello de luz inferior */
+    .contour-bottom-beam {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, transparent 5%, #00D2FF 30%, #FFFFFF 50%, #00D2FF 70%, transparent 95%);
+      box-shadow: 0 0 20px #00D2FF, 0 0 35px #0085CA;
+      filter: blur(1px);
+    }
+
+    @keyframes contourLightPulse {
+      0% {
+        opacity: 0.7;
+        box-shadow: 
+          0 0 18px rgba(0, 163, 255, 0.7),
+          0 0 35px rgba(0, 133, 202, 0.5),
+          inset 0 0 18px rgba(0, 163, 255, 0.5);
+      }
+      100% {
+        opacity: 1;
+        box-shadow: 
+          0 0 35px rgba(0, 163, 255, 1),
+          0 0 65px rgba(0, 133, 202, 0.85),
+          inset 0 0 30px rgba(0, 163, 255, 0.75),
+          inset 0 0 55px rgba(10, 83, 134, 0.6);
+      }
+    }
+
+    /* Micro-rebote táctil al presionar */
+    .business-card.haptic-pulse {
+      animation: cardHapticBounce 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes cardHapticBounce {
+      0% { transform: scale(1); }
+      35% { transform: scale(0.985); }
+      75% { transform: scale(1.006); }
+      100% { transform: scale(1); }
+    }
+
+    /* Píldora superior tipo Dynamic Island / Apple Pill */
+    .dynamic-island-toast {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-70px) scale(0.85);
+      background: rgba(4, 45, 79, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 16px 36px -6px rgba(4, 45, 79, 0.4), 0 0 0 1px rgba(0, 163, 255, 0.3);
+      z-index: 70;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .dynamic-island-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    .dynamic-island-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--alessa-cyan);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       CABECERA CORPORATIVA ALESSA (Fondo azul facetado dinámico)
+       ========================================================================== */
+    .card-header {
+      background: linear-gradient(155deg, var(--alessa-navy-dark) 0%, var(--alessa-navy) 40%, var(--alessa-blue) 75%, var(--alessa-blue-light) 100%);
+      padding: 30px 24px 74px 24px;
+      text-align: center;
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+      border-bottom-left-radius: 36px;
+      border-bottom-right-radius: 36px;
+      box-shadow: 0 12px 30px -10px rgba(7, 69, 116, 0.4);
+    }
+
+    /* Facetas decorativas que evocan la gráfica oficial de Alessa */
+    .header-facet-1 {
+      position: absolute;
+      top: -40px;
+      right: -30px;
+      width: 180px;
+      height: 180px;
+      background: linear-gradient(135deg, rgba(0, 133, 202, 0.25) 0%, transparent 70%);
+      transform: rotate(25deg);
+      pointer-events: none;
+    }
+
+    .header-facet-2 {
+      position: absolute;
+      bottom: -30px;
+      left: -40px;
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(315deg, rgba(13, 99, 158, 0.3) 0%, transparent 70%);
+      transform: rotate(-15deg);
+      pointer-events: none;
+    }
+
+    /* Logotipo oficial de Grupo Alessa en alta resolución */
+    .header-logo-container {
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header-alessa-logo {
+      height: 44px;
+      width: auto;
+      max-width: 190px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+    }
+
+    /* Foto de Perfil */
+    .avatar-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 14px;
+    }
+
+    .avatar-ring {
+      width: 124px;
+      height: 124px;
+      border-radius: 50%;
+      padding: 4px;
+      background: #FFFFFF;
+      box-shadow: 0 14px 30px -6px rgba(0, 0, 0, 0.35), 0 0 0 1.5px rgba(255, 255, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .avatar-wrapper:hover .avatar-ring {
+      transform: scale(1.03);
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      background-color: var(--alessa-border);
+      display: block;
+    }
+
+    /* Insignia Verificada Cyan Alessa */
+    .verified-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--alessa-cyan);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2.5px solid #FFFFFF;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Tipografía de la cabecera */
+    .person-name {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      line-height: 1.25;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .person-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: -0.1px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 5px;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 5px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .person-company {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(230, 243, 250, 0.92);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ==========================================================================
+       BOTÓN PRINCIPAL: GUARDAR CONTACTO (Azul Cyan Alessa)
+       ========================================================================== */
+    .save-cta-container {
+      margin-top: 22px;
+      padding: 0 8px;
+    }
+
+    .btn-save-contact {
+      width: 100%;
+      background: linear-gradient(180deg, var(--alessa-cyan) 0%, #006FB0 100%);
+      color: #FFFFFF;
+      border: none;
+      padding: 15px 24px;
+      border-radius: 18px;
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -4px rgba(0, 133, 202, 0.45), 0 2px 6px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border-bottom: 3px solid rgba(0, 90, 150, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-save-contact::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+
+    .btn-save-contact:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -4px rgba(0, 133, 202, 0.55), 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-save-contact:hover::after {
+      left: 140%;
+    }
+
+    .btn-save-contact:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 6px 14px -2px rgba(0, 133, 202, 0.35);
+    }
+
+    /* ==========================================================================
+       CUERPO PRINCIPAL Y BOTONES DE ACCIÓN RÁPIDA
+       ========================================================================== */
+    .card-body {
+      padding: 0 20px 28px 20px;
+      margin-top: -38px;
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Barra flotante de accesos rápidos */
+    .quick-actions-bar {
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 10px 8px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      box-shadow: 0 12px 28px -6px rgba(7, 69, 116, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--alessa-border);
+    }
+
+    .quick-action-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 4px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--alessa-text-primary);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .quick-action-item:hover {
+      background: var(--alessa-cyan-soft);
+      transform: translateY(-2px);
+    }
+
+    .quick-action-item:active {
+      transform: scale(0.95);
+    }
+
+    .quick-action-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .icon-call {
+      background: var(--alessa-cyan-soft);
+      color: var(--alessa-blue);
+    }
+    .quick-action-item:hover .icon-call {
+      background: var(--alessa-blue);
+      color: #FFFFFF;
+    }
+
+    .icon-wa {
+      background: #E8F8F0;
+      color: #128C7E;
+    }
+    .quick-action-item:hover .icon-wa {
+      background: #25D366;
+      color: #FFFFFF;
+    }
+
+    .icon-email {
+      background: var(--alessa-cyan-soft);
+      color: var(--alessa-blue);
+    }
+    .quick-action-item:hover .icon-email {
+      background: var(--alessa-blue);
+      color: #FFFFFF;
+    }
+
+    .quick-action-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--alessa-text-primary);
+    }
+
+    /* ==========================================================================
+       SECCIONES DE ACORDEÓN INTERACTIVO
+       ========================================================================== */
+    .accordion-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid var(--alessa-border);
+      box-shadow: 0 4px 14px rgba(7, 69, 116, 0.04);
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .accordion-card:hover {
+      border-color: #B9D3E8;
+      box-shadow: 0 6px 18px rgba(7, 69, 116, 0.07);
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      transition: background 0.15s ease;
+    }
+
+    .accordion-trigger:hover {
+      background: #F8FAFC;
+    }
+
+    .accordion-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .accordion-icon-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .badge-blue {
+      background: var(--alessa-cyan-soft);
+      color: var(--alessa-blue);
+    }
+
+    .badge-cyan {
+      background: rgba(0, 133, 202, 0.12);
+      color: var(--alessa-cyan);
+    }
+
+    .badge-qr {
+      background: #F1F6FB;
+      color: var(--alessa-navy);
+    }
+
+    .accordion-title-group h2 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--alessa-text-primary);
+      line-height: 1.25;
+    }
+
+    .accordion-title-group p {
+      font-size: 11.5px;
+      color: var(--alessa-text-secondary);
+      margin-top: 1px;
+    }
+
+    .chevron-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--alessa-text-subtle);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+    }
+
+    .chevron-icon.rotate {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease-out;
+      border-top: 1px solid transparent;
+    }
+
+    .accordion-content.open {
+      max-height: 480px;
+      opacity: 1;
+      border-top-color: var(--alessa-border-light);
+      padding: 14px 16px 16px 16px;
+    }
+
+    /* Filas de Información */
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 13px;
+      border-radius: 14px;
+      background: #F8FAFC;
+      border: 1px solid #EDF2F7;
+      margin-bottom: 9px;
+      transition: background 0.15s ease;
+    }
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-row:hover {
+      background: #F0F6FB;
+    }
+
+    .info-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .info-icon-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: #FFFFFF;
+      color: var(--alessa-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+      flex-shrink: 0;
+    }
+
+    .info-labels {
+      overflow: hidden;
+    }
+
+    .info-label {
+      display: block;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--alessa-text-subtle);
+    }
+
+    .info-value {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--alessa-text-primary);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.15s ease;
+    }
+
+    .info-value:hover {
+      color: var(--alessa-cyan);
+    }
+
+    .btn-action-copy {
+      background: #FFFFFF;
+      border: 1px solid var(--alessa-border);
+      border-radius: 9px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--alessa-text-secondary);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-copy:hover {
+      color: var(--alessa-cyan);
+      border-color: var(--alessa-cyan);
+      background: var(--alessa-cyan-soft);
+    }
+
+    .btn-action-copy:active {
+      transform: scale(0.92);
+    }
+
+    /* Bloque Empresa Alessa */
+    .company-showcase {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background: #F8FAFC;
+      border-radius: 14px;
+      border: 1px solid #EDF2F7;
+    }
+
+    .company-logo-badge {
+      background: var(--alessa-navy);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(7, 69, 116, 0.25);
+    }
+
+    /* Sección QR en acordeón */
+    .qr-preview-box {
+      text-align: center;
+      padding: 10px 0 6px 0;
+    }
+
+    .qr-image-container {
+      width: 195px;
+      height: 195px;
+      margin: 0 auto 12px auto;
+      border-radius: 24px;
+      padding: 8px;
+      background: #FFFFFF;
+      box-shadow: 0 10px 24px -4px rgba(7, 69, 116, 0.12), 0 0 0 1px rgba(7, 69, 116, 0.08);
+      position: relative;
+    }
+
+    .qr-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 18px;
+      display: block;
+    }
+
+    /* Botón Compartir Tarjeta */
+    .btn-share-card {
+      width: 100%;
+      background: #F1F6FB;
+      color: var(--alessa-text-primary);
+      border: 1px solid var(--alessa-border);
+      padding: 13px 20px;
+      border-radius: 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 4px;
+    }
+
+    .btn-share-card:hover {
+      background: var(--alessa-cyan-soft);
+      border-color: #B9D3E8;
+      transform: translateY(-1px);
+    }
+
+    .btn-share-card:active {
+      transform: scale(0.98);
+    }
+
+    /* ==========================================================================
+       PIE DE PÁGINA
+       ========================================================================== */
+    .card-footer {
+      text-align: center;
+      padding: 18px 20px 24px 20px;
+      font-size: 11.5px;
+      color: var(--alessa-text-subtle);
+    }
+
+    .footer-brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--alessa-text-secondary);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       TOAST FLOTANTE CONVENCIONAL
+       ========================================================================== */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--alessa-navy-dark);
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 163, 255, 0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* SVG utilities */
+    .svg-icon {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .svg-icon-sm {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==========================================================================
+       TARJETA DE PRESENTACIÓN PRINCIPAL (Mobile-First)
+       ========================================================================== -->
+  <main class="business-card" id="cardContainer">
+
+    <!-- EFECTO NAMEDROP ESTÁTICO DE CONTORNOS (Ilumina estrictamente los bordes, sin rotación) -->
+    <div class="contour-glow-overlay" id="contourOverlay">
+      <div class="contour-light-frame"></div>
+      <div class="contour-top-beam"></div>
+      <div class="contour-bottom-beam"></div>
+    </div>
+
+    <!-- NOTIFICACIÓN TIPO DYNAMIC ISLAND / APPLE PILL -->
+    <div class="dynamic-island-toast" id="dynamicToast">
+      <div class="dynamic-island-icon">
+        <svg class="svg-icon-sm" style="stroke-width: 3;" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <span id="dynamicToastText">Contacto guardado en tu agenda</span>
+    </div>
+
+    <!-- ENCABEZADO CORPORATIVO (Paleta Oficial Alessa) -->
+    <header class="card-header">
+      <div class="header-facet-1"></div>
+      <div class="header-facet-2"></div>
+
+      <!-- Logotipo oficial de Grupo Alessa S.A. en alta resolución -->
+      <div class="header-logo-container">
+        <img 
+          src="logo_alessa.png" 
+          alt="Grupo Alessa S.A." 
+          class="header-alessa-logo"
+        />
+      </div>
+
+      <!-- Contenedor Foto de Perfil -->
+      <div class="avatar-wrapper">
+        <div class="avatar-ring">
+          <img 
+            id="profilePhoto"
+            src="foto.jpg" 
+            alt="Ing. Bella Gavilanes"
+            class="avatar-img"
+            onerror="this.onerror=null; this.src='mami.jpg';"
+          />
+        </div>
+        <!-- Insignia Verificada Alessa -->
+        <div class="verified-badge" title="Perfil Corporativo Verificado">
+          <svg class="svg-icon-sm" style="stroke-width: 3.2; width: 14px; height: 14px;" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Datos Principales -->
+      <h1 class="person-name">Ing. Bella Gavilanes</h1>
+      
+      <div>
+        <span class="person-title">
+          <svg class="svg-icon-sm" style="color: var(--alessa-cyan-glow); width: 14px; height: 14px;" viewBox="0 0 24 24">
+            <path d="M20 7h-9"></path>
+            <path d="M14 17H5"></path>
+            <circle cx="17" cy="17" r="3"></circle>
+            <circle cx="7" cy="7" r="3"></circle>
+          </svg>
+          Gerente de Cadena de Abastecimiento
+        </span>
+      </div>
+
+      <p class="person-company">
+        <svg class="svg-icon-sm" style="width: 14px; height: 14px; color: var(--alessa-cyan-glow);" viewBox="0 0 24 24">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        Grupo Alessa &bull; Alessa S.A.
+      </p>
+
+      <!-- Botón Principal: Guardar Contacto (Dispara animación de contornos y descarga vCard) -->
+      <div class="save-cta-container">
+        <button 
+          id="btnSaveContact"
+          class="btn-save-contact"
+          onclick="triggerContourGlowAndSave()"
+          aria-label="Guardar contacto en la agenda telefónica"
+        >
+          <svg class="svg-icon" style="stroke-width: 2.4;" viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <line x1="19" y1="8" x2="19" y2="14"></line>
+            <line x1="22" y1="11" x2="16" y2="11"></line>
+          </svg>
+          Guardar contacto
+        </button>
+      </div>
+    </header>
+
+    <!-- CUERPO PRINCIPAL -->
+    <div class="card-body">
+
+      <!-- BARRA DE ACCESOS RÁPIDOS (Llamar, WhatsApp, Correo) -->
+      <div class="quick-actions-bar">
+        <!-- Llamada directa (+593 99 746 0811) -->
+        <a href="tel:+593997460811" class="quick-action-item" title="Llamar al teléfono celular">
+          <div class="quick-action-icon icon-call">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </div>
+          <span class="quick-action-label">Llamar</span>
+        </a>
+
+        <!-- WhatsApp directo (+593 99 746 0811) -->
+        <a 
+          href="https://wa.me/593997460811?text=Hola%20Ing.%20Bella%20Gavilanes,%20un%20gusto%20saludarle." 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="quick-action-item" 
+          title="Abrir chat en WhatsApp"
+        >
+          <div class="quick-action-icon icon-wa">
+            <svg class="svg-icon" style="fill: currentColor; stroke: none;" viewBox="0 0 24 24">
+              <path d="M12.031 2C6.495 2 2 6.495 2 12.031c0 1.954.561 3.823 1.624 5.432L2 22l4.708-1.579a9.986 9.986 0 005.323 1.54h.005c5.536 0 10.031-4.496 10.031-10.031 0-5.535-4.495-9.93-10.036-9.93zm5.882 14.167c-.247.697-1.433 1.341-1.986 1.393-.509.052-.98.243-3.232-.676-2.619-1.072-4.29-3.743-4.42-3.916-.13-.173-1.06-1.411-1.06-2.693 0-1.282.668-1.913.905-2.174.237-.26.518-.327.692-.327.174 0 .348.002.5.011.162.008.38-.061.595.454.225.536.768 1.874.836 2.012.068.138.113.303.02.489-.092.186-.138.303-.274.463-.137.16-.288.358-.412.48-.137.135-.28.281-.12.556.16.275.71 1.173 1.523 1.898 1.045.932 1.927 1.22 2.203 1.357.275.138.436.115.597-.07.16-.184.692-.806.876-1.082.184-.275.368-.23.614-.138.246.092 1.564.737 1.833.872.269.135.449.202.515.316.066.115.066.666-.181 1.363z"/>
+            </svg>
+          </div>
+          <span class="quick-action-label">WhatsApp</span>
+        </a>
+
+        <!-- Correo Institucional (bella.gavilanes@alessa.com.ec) -->
+        <a href="mailto:bella.gavilanes@alessa.com.ec" class="quick-action-item" title="Enviar correo institucional">
+          <div class="quick-action-icon icon-email">
+            <svg class="svg-icon" viewBox="0 0 24 24">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <span class="quick-action-label">Correo</span>
+        </a>
+      </div>
+
+      <!-- ACORDEÓN 1: INFORMACIÓN DE CONTACTO DIRECTO -->
+      <section class="accordion-card">
+        <button 
+          class="accordion-trigger" 
+          onclick="toggleAccordion('contactContent', 'contactChevron')"
+          aria-expanded="true"
+        >
+          <div class="accordion-header-left">
+            <div class="accordion-icon-badge badge-blue">
+              <svg class="svg-icon" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </div>
+            <div class="accordion-title-group">
+              <h2>Contacto Directo</h2>
+              <p>Teléfono móvil y correo corporativo</p>
+            </div>
+          </div>
+          <svg class="chevron-icon rotate" id="contactChevron" viewBox="0 0 24 24">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <div class="accordion-content open" id="contactContent">
+          <!-- Fila Teléfono Actualizado (+593 99 746 0811) -->
+          <div class="info-row">
+            <div class="info-left">
+              <div class="info-icon-small">
+                <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                  <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                </svg>
+              </div>
+              <div class="info-labels">
+                <span class="info-label">Teléfono Móvil / WhatsApp</span>
+                <a href="tel:+593997460811" class="info-value">+593 99 746 0811</a>
+              </div>
+            </div>
+            <button 
+              class="btn-action-copy" 
+              onclick="copyData('+593997460811', 'Teléfono copiado')" 
+              title="Copiar número de teléfono"
+            >
+              <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Fila Correo Electrónico Alessa -->
+          <div class="info-row">
+            <div class="info-left">
+              <div class="info-icon-small">
+                <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+              <div class="info-labels">
+                <span class="info-label">Correo Institucional</span>
+                <a href="mailto:bella.gavilanes@alessa.com.ec" class="info-value">bella.gavilanes@alessa.com.ec</a>
+              </div>
+            </div>
+            <button 
+              class="btn-action-copy" 
+              onclick="copyData('bella.gavilanes@alessa.com.ec', 'Correo copiado')" 
+              title="Copiar correo electrónico"
+            >
+              <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACORDEÓN 2: INFORMACIÓN CORPORATIVA Y CARGO -->
+      <section class="accordion-card">
+        <button 
+          class="accordion-trigger" 
+          onclick="toggleAccordion('companyContent', 'companyChevron')"
+          aria-expanded="true"
+        >
+          <div class="accordion-header-left">
+            <div class="accordion-icon-badge badge-cyan">
+              <svg class="svg-icon" viewBox="0 0 24 24">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+            </div>
+            <div class="accordion-title-group">
+              <h2>Perfil Corporativo</h2>
+              <p>Organización y cargo directivo</p>
+            </div>
+          </div>
+          <svg class="chevron-icon rotate" id="companyChevron" viewBox="0 0 24 24">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <div class="accordion-content open" id="companyContent">
+          <!-- Bloque Identidad Grupo Alessa -->
+          <div class="company-showcase">
+            <div class="company-logo-badge">ALESSA</div>
+            <div>
+              <span class="info-label">Compañía</span>
+              <p style="font-size: 14.5px; font-weight: 800; color: var(--alessa-text-primary); line-height: 1.2;">
+                Grupo Alessa &bull; Alessa S.A.
+              </p>
+              <p style="font-size: 11.5px; color: var(--alessa-cyan); font-weight: 600; margin-top: 2px;">
+                "Tu primer y mejor aliado" &bull; Ecuador
+              </p>
+            </div>
+          </div>
+
+          <!-- Cargo Actualizado -->
+          <div class="info-row" style="margin-top: 10px;">
+            <div class="info-left">
+              <div class="info-icon-small">
+                <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div class="info-labels">
+                <span class="info-label">Cargo Directivo</span>
+                <span class="info-value">Gerente de Cadena de Abastecimiento</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enlace Web Corporativa Alessa -->
+          <div class="info-row">
+            <div class="info-left">
+              <div class="info-icon-small">
+                <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </div>
+              <div class="info-labels">
+                <span class="info-label">Portal Corporativo</span>
+                <a href="https://www.alessa.com.ec" target="_blank" rel="noopener noreferrer" class="info-value">
+                  alessa.com.ec
+                </a>
+              </div>
+            </div>
+            <a 
+              href="https://www.alessa.com.ec" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-action-copy" 
+              title="Visitar portal web de Grupo Alessa"
+            >
+              <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACORDEÓN 3: CÓDIGO QR PARA ESCANEO EN PERSONA -->
+      <section class="accordion-card">
+        <button 
+          class="accordion-trigger" 
+          onclick="toggleAccordion('qrContent', 'qrChevron')"
+          aria-expanded="false"
+        >
+          <div class="accordion-header-left">
+            <div class="accordion-icon-badge badge-qr">
+              <svg class="svg-icon" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </div>
+            <div class="accordion-title-group">
+              <h2>Código QR Grupo Alessa</h2>
+              <p>Escaneo instantáneo sin contacto</p>
+            </div>
+          </div>
+          <svg class="chevron-icon" id="qrChevron" viewBox="0 0 24 24">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <div class="accordion-content" id="qrContent">
+          <div class="qr-preview-box">
+            <div class="qr-image-container">
+              <img 
+                src="qr_tarjeta.png" 
+                alt="Código QR Tarjeta Digital Grupo Alessa"
+                onerror="this.onerror=null; this.src='qr_tarjeta_alta_resolucion.png';"
+              />
+            </div>
+            <p style="font-size: 12px; color: var(--alessa-text-secondary); max-width: 260px; margin: 0 auto 10px auto;">
+              Apunta la cámara del smartphone para abrir esta tarjeta directamente.
+            </p>
+            <a 
+              href="qr_tarjeta_alta_resolucion.png" 
+              download="QR_Ing_Bella_Gavilanes_Alessa.png"
+              class="btn-share-card"
+              style="text-decoration: none;"
+            >
+              <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Descargar QR en Alta Resolución
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOTÓN COMPARTIR ESTA TARJETA -->
+      <button class="btn-share-card" onclick="shareCurrentCard()">
+        <svg class="svg-icon-sm" viewBox="0 0 24 24">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        Compartir esta tarjeta digital
+      </button>
+
+    </div>
+
+    <!-- PIE DE PÁGINA SUTIL -->
+    <footer class="card-footer">
+      <div class="footer-brand-badge">
+        <svg class="svg-icon-sm" style="color: var(--alessa-cyan); width: 12px; height: 12px;" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>Grupo Alessa &bull; Tarjeta Digital Ejecutiva</span>
+      </div>
+      <p style="margin-top: 4px; font-size: 11px;">Guayaquil, Ecuador</p>
+    </footer>
+
+    <!-- TOAST INFERIOR -->
+    <div class="toast-msg" id="standardToast">
+      <svg class="svg-icon-sm" style="color: var(--alessa-cyan-glow);" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="standardToastText">Copiado al portapapeles</span>
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       LÓGICA JAVASCRIPT VANILLA (Rendimiento nativo sin dependencias)
+       ========================================================================== -->
+  <script>
+    // --------------------------------------------------------------------------
+    // 1. ALTERNAR ACORDEONES INTERACTIVOS
+    // --------------------------------------------------------------------------
+    function toggleAccordion(contentId, chevronId) {
+      const content = document.getElementById(contentId);
+      const chevron = document.getElementById(chevronId);
+      if (!content || !chevron) return;
+
+      const isOpen = content.classList.contains('open');
+      if (isOpen) {
+        content.classList.remove('open');
+        chevron.classList.remove('rotate');
+      } else {
+        content.classList.add('open');
+        chevron.classList.add('rotate');
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // 2. ILUMINACIÓN PERIMETRAL DE CONTORNOS (Estática, sin giros ni rotación)
+    // --------------------------------------------------------------------------
+    let isGlowRunning = false;
+
+    function triggerContourGlowAndSave() {
+      if (isGlowRunning) return;
+      isGlowRunning = true;
+
+      const card = document.getElementById('cardContainer');
+      const overlay = document.getElementById('contourOverlay');
+      const toast = document.getElementById('dynamicToast');
+
+      // 1. Pulso háptico en smartphone
+      if (typeof navigator.vibrate === 'function') {
+        try {
+          navigator.vibrate([35, 55, 40]);
+        } catch (e) {}
+      }
+
+      // 2. Micro-rebote físico sutil del teléfono
+      if (card) {
+        card.classList.add('haptic-pulse');
+        setTimeout(() => card.classList.remove('haptic-pulse'), 550);
+      }
+
+      // 3. Iluminar contornos exteriores (borde perimetral cyan/azul estático)
+      if (overlay) {
+        overlay.classList.add('active');
+      }
+
+      // 4. Desplegar notificación superior tipo Dynamic Island
+      if (toast) {
+        toast.classList.add('show');
+      }
+
+      // 5. Descargar automáticamente la vCard 3.0 con los datos actualizados
+      downloadVCard();
+
+      // 6. Desvanecer la iluminación suavemente tras 2.2 segundos
+      setTimeout(() => {
+        if (overlay) overlay.classList.remove('active');
+        if (toast) toast.classList.remove('show');
+        isGlowRunning = false;
+      }, 2200);
+    }
+
+    // --------------------------------------------------------------------------
+    // 3. GENERADOR DE ARCHIVO VCARD 3.0 CON DATOS DE GRUPO ALESSA
+    // --------------------------------------------------------------------------
+    function downloadVCard() {
+      const vCardLines = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'N:Gavilanes;Bella;;Ing.;',
+        'FN:Ing. Bella Gavilanes',
+        'ORG:Grupo Alessa;Cadena de Abastecimiento',
+        'TITLE:Gerente de Cadena de Abastecimiento',
+        'TEL;TYPE=CELL,VOICE,PREF:+593997460811',
+        'EMAIL;TYPE=INTERNET,WORK,PREF:bella.gavilanes@alessa.com.ec',
+        'URL;TYPE=WORK:https://www.alessa.com.ec',
+        'ADR;TYPE=WORK:;;Guayaquil;Guayas;;Ecuador',
+        'NOTE:Gerente de Cadena de Abastecimiento en Grupo Alessa (Alessa S.A.)',
+        'REV:' + new Date().toISOString(),
+        'END:VCARD'
+      ];
+
+      const vcardText = vCardLines.join('\r\n');
+      const blob = new Blob([vcardText], { type: 'text/vcard;charset=utf-8;' });
+      const downloadUrl = URL.createObjectURL(blob);
+
+      const downloadLink = document.createElement('a');
+      downloadLink.href = downloadUrl;
+      downloadLink.setAttribute('download', 'Bella_Gavilanes_Alessa.vcf');
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(downloadUrl);
+    }
+
+    // --------------------------------------------------------------------------
+    // 4. COPIAR DATOS CON FEEDBACK FLOTANTE
+    // --------------------------------------------------------------------------
+    let toastTimeout;
+    function copyData(text, feedbackMsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showStandardToast(feedbackMsg);
+        }).catch(() => {
+          fallbackCopyText(text, feedbackMsg);
+        });
+      } else {
+        fallbackCopyText(text, feedbackMsg);
+      }
+    }
+
+    function fallbackCopyText(text, feedbackMsg) {
+      try {
+        const tempInput = document.createElement('textarea');
+        tempInput.value = text;
+        tempInput.style.position = 'fixed';
+        tempInput.style.opacity = '0';
+        document.body.appendChild(tempInput);
+        tempInput.focus();
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        showStandardToast(feedbackMsg);
+      } catch (err) {
+        showStandardToast('No se pudo copiar automáticamente');
+      }
+    }
+
+    function showStandardToast(message) {
+      const toast = document.getElementById('standardToast');
+      const toastText = document.getElementById('standardToastText');
+      if (!toast || !toastText) return;
+
+      toastText.textContent = message;
+      toast.classList.add('show');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // --------------------------------------------------------------------------
+    // 5. COMPARTIR TARJETA (Web Share API nativa de smartphones)
+    // --------------------------------------------------------------------------
+    function shareCurrentCard() {
+      const shareData = {
+        title: 'Ing. Bella Gavilanes - Grupo Alessa',
+        text: 'Tarjeta digital ejecutiva de Ing. Bella Gavilanes (Gerente de Cadena de Abastecimiento - Grupo Alessa)',
+        url: window.location.href
+      };
+
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        navigator.share(shareData).catch((err) => {});
+      } else {
+        copyData(window.location.href, 'Enlace de la tarjeta copiado');
+      }
+    }
+  </script>
+
+</body>
+</html>
