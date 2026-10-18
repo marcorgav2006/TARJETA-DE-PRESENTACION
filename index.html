@@ -739,29 +739,99 @@
       transform: scale(0.92);
     }
 
-    /* Bloque Empresa Alessa */
-    .company-showcase {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px;
+    /* Tarjetas Corporativas con Logotipos Oficiales (Alessa y Estuardo Sánchez) */
+    .company-card {
       background: #F8FAFC;
-      border-radius: 14px;
+      border-radius: 16px;
       border: 1px solid #EDF2F7;
+      padding: 13px;
+      margin-bottom: 11px;
+      transition: all 0.2s ease;
     }
 
-    .company-logo-badge {
-      background: var(--alessa-navy);
-      color: #FFFFFF;
-      font-weight: 800;
-      font-size: 13px;
-      padding: 8px 12px;
-      border-radius: 10px;
-      letter-spacing: 0.5px;
+    .company-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .company-card:hover {
+      background: #F0F6FB;
+      border-color: #D6E4F0;
+      box-shadow: 0 4px 14px rgba(7, 69, 116, 0.06);
+    }
+
+    .company-card-top {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 10px;
+    }
+
+    .company-brand-logo-wrap {
+      width: 76px;
+      height: 48px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1px solid var(--alessa-border);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 10px rgba(7, 69, 116, 0.25);
+      padding: 4px 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      flex-shrink: 0;
+    }
+
+    .company-brand-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .company-brand-info {
+      overflow: hidden;
+    }
+
+    .company-brand-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--alessa-text-primary);
+      line-height: 1.25;
+      margin-top: 1px;
+    }
+
+    .company-brand-slogan {
+      font-size: 11px;
+      color: var(--alessa-cyan);
+      font-weight: 600;
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    .company-link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+      border: 1px solid var(--alessa-border);
+      border-radius: 11px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--alessa-blue);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .company-link-btn:hover {
+      background: var(--alessa-cyan-soft);
+      color: var(--alessa-cyan);
+      border-color: var(--alessa-cyan);
+    }
+
+    .company-link-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     /* Sección QR en acordeón */
@@ -1133,22 +1203,8 @@
         </button>
 
         <div class="accordion-content open" id="companyContent">
-          <!-- Bloque Identidad Grupo Alessa -->
-          <div class="company-showcase">
-            <div class="company-logo-badge">ALESSA</div>
-            <div>
-              <span class="info-label">Compañía</span>
-              <p style="font-size: 14.5px; font-weight: 800; color: var(--alessa-text-primary); line-height: 1.2;">
-                Grupo Alessa &bull; Alessa S.A.
-              </p>
-              <p style="font-size: 11.5px; color: var(--alessa-cyan); font-weight: 600; margin-top: 2px;">
-                "Tu primer y mejor aliado" &bull; Ecuador
-              </p>
-            </div>
-          </div>
-
-          <!-- Cargo Actualizado -->
-          <div class="info-row" style="margin-top: 10px;">
+          <!-- Cargo Directivo -->
+          <div class="info-row" style="margin-bottom: 12px;">
             <div class="info-left">
               <div class="info-icon-small">
                 <svg class="svg-icon-sm" viewBox="0 0 24 24">
@@ -1156,36 +1212,62 @@
                 </svg>
               </div>
               <div class="info-labels">
-                <span class="info-label">Cargo Directivo</span>
+                <span class="info-label">Posición Ejecutiva</span>
                 <span class="info-value">Gerente de Cadena de Abastecimiento</span>
               </div>
             </div>
           </div>
 
-          <!-- Enlace Web Corporativa Alessa -->
-          <div class="info-row">
-            <div class="info-left">
-              <div class="info-icon-small">
+          <!-- Entidad 1: Grupo Alessa (Matriz Corporativa) -->
+          <div class="company-card">
+            <div class="company-card-top">
+              <div class="company-brand-logo-wrap">
+                <img src="logo_alessa_azul.png" alt="Grupo Alessa" class="company-brand-img" />
+              </div>
+              <div class="company-brand-info">
+                <span class="info-label">Matriz Corporativa</span>
+                <h3 class="company-brand-title">Grupo Alessa &bull; Alessa S.A.</h3>
+                <p class="company-brand-slogan">"Tu primer y mejor aliado" &bull; Ecuador</p>
+              </div>
+            </div>
+            <a href="https://www.alessa.com.ec" target="_blank" rel="noopener noreferrer" class="company-link-btn" title="Visitar portal web de Grupo Alessa">
+              <div class="company-link-left">
                 <svg class="svg-icon-sm" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="2" y1="12" x2="22" y2="12"></line>
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                 </svg>
+                <span>alessa.com.ec</span>
               </div>
-              <div class="info-labels">
-                <span class="info-label">Portal Corporativo</span>
-                <a href="https://www.alessa.com.ec" target="_blank" rel="noopener noreferrer" class="info-value">
-                  alessa.com.ec
-                </a>
+              <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Entidad 2: Almacenes Estuardo Sánchez (Cadena Comercial) -->
+          <div class="company-card">
+            <div class="company-card-top">
+              <div class="company-brand-logo-wrap">
+                <img src="logo_estuardo_sanchez.png" alt="Almacenes Estuardo Sánchez" class="company-brand-img" />
+              </div>
+              <div class="company-brand-info">
+                <span class="info-label">Cadena Comercial</span>
+                <h3 class="company-brand-title">Almacenes Estuardo Sánchez</h3>
+                <p class="company-brand-slogan">Líder en retail y distribución &bull; Ecuador</p>
               </div>
             </div>
-            <a 
-              href="https://www.alessa.com.ec" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="btn-action-copy" 
-              title="Visitar portal web de Grupo Alessa"
-            >
+            <a href="https://www.estuardosanchez.com" target="_blank" rel="noopener noreferrer" class="company-link-btn" title="Visitar portal web de Almacenes Estuardo Sánchez">
+              <div class="company-link-left">
+                <svg class="svg-icon-sm" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <span>estuardosanchez.com</span>
+              </div>
               <svg class="svg-icon-sm" viewBox="0 0 24 24">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                 <polyline points="15 3 21 3 21 9"></polyline>
@@ -1378,13 +1460,14 @@
         'VERSION:3.0',
         'N:Gavilanes;Bella;;Ing.;',
         'FN:Ing. Bella Gavilanes',
-        'ORG:Grupo Alessa;Cadena de Abastecimiento',
+        'ORG:Grupo Alessa;Almacenes Estuardo Sánchez',
         'TITLE:Gerente de Cadena de Abastecimiento',
         'TEL;TYPE=CELL,VOICE,PREF:+593997460811',
         'EMAIL;TYPE=INTERNET,WORK,PREF:bella.gavilanes@alessa.com.ec',
         'URL;TYPE=WORK:https://www.alessa.com.ec',
+        'URL;TYPE=WORK:https://www.estuardosanchez.com',
         'ADR;TYPE=WORK:;;Guayaquil;Guayas;;Ecuador',
-        'NOTE:Gerente de Cadena de Abastecimiento en Grupo Alessa (Alessa S.A.)',
+        'NOTE:Gerente de Cadena de Abastecimiento en Grupo Alessa y Almacenes Estuardo Sánchez',
         'PHOTO;ENCODING=b;TYPE=JPEG:' + FOTO_VCARD_B64,
         'REV:' + new Date().toISOString(),
         'END:VCARD'
